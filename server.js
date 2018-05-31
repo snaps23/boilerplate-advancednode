@@ -1,21 +1,22 @@
-'use strict';
-
-const express     = require('express');
-const bodyParser  = require('body-parser');
-const fccTesting  = require('./freeCodeCamp/fcctesting.js');
+const express     = require("express");
+const bodyParser  = require("body-parser");
+const fccTesting  = require("./freeCodeCamp/fcctesting.js");
+const path = require("path");
+const port = process.env.PORT || 3000;
 
 const app = express();
 
 fccTesting(app); //For FCC testing purposes
-app.use('/public', express.static(process.cwd() + '/public'));
+app.set(path.join(__dirname, "public"));
+app.set("view engine", "pug");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.route('/')
   .get((req, res) => {
-    res.sendFile(process.cwd() + '/views/index.html');
+    res.render("pug/index");
   });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Listening on port " + process.env.PORT);
+app.listen(port, () => {
+  console.log("Listening on port " + port );
 });
